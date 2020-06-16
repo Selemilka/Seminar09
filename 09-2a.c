@@ -3,6 +3,7 @@
 #include <sys/msg.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define LAST_MESSAGE 255
 
@@ -18,9 +19,10 @@ int main() {
     struct mymsgbuf {
         long mtype;
         struct {
-            int iinfo;
-            float finfo;
-        } info;
+            int x;
+            char c;
+            double d;
+        } msg;
     } mybuf;
 
     if ((key = ftok(pathname, 0)) < 0) {
@@ -35,9 +37,10 @@ int main() {
 
     for (int i = 0; i < 5; ++i) {
         mybuf.mtype = 1;
-        mybuf.info.iinfo = 666;
-        mybuf.info.finfo = 66.6;
-        len = sizeof(mybuf.info);
+        mybuf.msg.x = 42;
+        mybuf.msg.c = 'w';
+        mybuf.msg.d = 5.51;
+        len = sizeof(mybuf.msg);
 
         if (msgsnd(msqid, &mybuf, len, 0) < 0) {
             printf("Can't send message to queue\n");

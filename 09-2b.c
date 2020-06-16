@@ -3,6 +3,7 @@
 #include <sys/msg.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define LAST_MESSAGE 255
 
@@ -15,13 +16,14 @@ int main() {
 
 	int len, maxlen;
 
-	struct mymsgbuf {
-		long mtype;
-		struct {
-			int iinfo;
-			float finfo;
-		} info;
-	} mybuf;
+    struct mymsgbuf {
+        long mtype;
+        struct {
+            int x;
+            char c;
+            double d;
+        } msg;
+    } mybuf;
 
 	if ((key = ftok(pathname, 0)) < 0) {
 		printf("Can't generate key\n");
@@ -34,7 +36,7 @@ int main() {
 	}
 
 	while (1) {
-		maxlen = sizeof(mybuf.info);
+		maxlen = sizeof(mybuf.msg);
 		if (len = msgrcv(msqid, &mybuf, maxlen, 0, 0) < 0) {
 			printf("Can't receive message from queue\n");
 			exit(-1);
@@ -45,13 +47,12 @@ int main() {
 			exit(0);
 		}
 
-		printf("message type = %ld, iInfo = %i, fInfo = %f\n", mybuf.mtype, mybuf.info.iinfo, mybuf.info.finfo);
+		printf("message type = %ld\n    x = %d\n    c = %c\n    d = %lf\n", 
+				mybuf.mtype, 
+				mybuf.msg.x, 
+				mybuf.msg.c,
+				mybuf.msg.d);
 	}
 
 	return 0;
 }
-
-
-
-
-

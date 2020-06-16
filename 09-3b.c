@@ -15,9 +15,7 @@ int main() {
 
     struct mymsgbuf {
         long mtype;
-        struct {
-            short iinfo;
-        } info;
+        int value;
     } mybuf;
 
     if ((key = ftok(pathname, 0)) < 0) {
@@ -30,19 +28,19 @@ int main() {
         exit(-1);
     }
 
-    printf("2nd program started receiving messages from 1st.\n");
+    printf("[Program2]: Recieving messages from first program...\n");
     for (int i = 0; i < 5; ++i) {
-        maxlen = sizeof(mybuf.info);
+        maxlen = sizeof(mybuf.value);
         if (len = msgrcv(msqid, (struct msgbuf *) &mybuf, maxlen, 1, 0) < 0) {
             printf("Can't receive message from queue\n");
             exit(-1);
         }
 
-        printf("2nd program received message type = %ld, iInfo = %i\n", mybuf.mtype, mybuf.info.iinfo);
+        printf("[Program2]: recieve message type = %ld, iInfo = %i\n", mybuf.mtype, mybuf.value);
     }
 
-    printf("2nd program finished receiving messages from 1st.\n");
-    printf("2nd program started sending messages to first.\n");
+    printf("[Program2]: finished receiving messages from Program1.\n");
+    printf("[Program2]: sending messages to Program1.\n");
 
     for (int i = 0; i < 5; ++i) {
         mybuf.mtype = 2;
@@ -56,12 +54,7 @@ int main() {
         }
     }
 
-    printf("2nd program finished sending messages to first.\n");
+    printf("[Program2]: finished sending messages to Program1.\n");
 
     return 0;
 }
-
-
-
-
-

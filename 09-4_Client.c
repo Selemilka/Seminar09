@@ -24,15 +24,15 @@ int main() {
         long mtype;
         struct {
             pid_t pid;
-            char message[666];
-        } info;
+            char message[256];
+        } msg;
     } clientbuf;
 
     struct servermsgbuf {
         long mtype;
         struct {
-            char message[666];
-        } info;
+            char message[256];
+        } msg;
     } serverbuf;
 
     if ((key = ftok(pathname, 0)) < 0) {

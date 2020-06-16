@@ -21,8 +21,6 @@ int main(void)
        char mtext[81];
     } mybuf;
 
-
-
     /* Create or attach message queue  */
     
     key = ftok(pathname, 0);
@@ -31,7 +29,6 @@ int main(void)
        printf("Can\'t get msqid\n");
        exit(-1);
     }
-
 
     /* Send information */
     
@@ -59,5 +56,5 @@ int main(void)
        exit(-1);
     }
 
-    return 0;    
+    return 0;
 }
