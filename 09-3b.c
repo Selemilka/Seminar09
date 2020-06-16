@@ -3,6 +3,7 @@
 #include <sys/msg.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 int main() {
     int msqid;
@@ -44,8 +45,8 @@ int main() {
 
     for (int i = 0; i < 5; ++i) {
         mybuf.mtype = 2;
-        mybuf.info.iinfo = 999;
-        len = sizeof(mybuf.info);
+        mybuf.value = 69;
+        len = sizeof(mybuf.value);
 
         if (msgsnd(msqid, (struct msgbuf *) &mybuf, len, 0) < 0) {
             printf("Can't send message to queue\n");

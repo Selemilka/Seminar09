@@ -3,6 +3,7 @@
 #include <sys/msg.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 int main() {
     int msqid;
@@ -43,7 +44,7 @@ int main() {
 
     printf("[Program1]: sent messages, recieving from Program2...\n");
     for (int i = 0; i < 5; ++i) {
-        maxlen = sizeof(mybuf.info);
+        maxlen = sizeof(mybuf.value);
         if (len = msgrcv(msqid, (struct msgbuf *) &mybuf, maxlen, 2, 0) < 0) {
             printf("Can't receive message from queue\n");
             exit(-1);
