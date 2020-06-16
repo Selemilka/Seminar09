@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
-
+#include <stdlib.h>
 
 int main() {
 
@@ -46,12 +46,12 @@ int main() {
     }
 
     clientbuf.mtype = 1;
-    clientbuf.info.pid = getpid();
+    clientbuf.msg.pid = getpid();
 
-    len = sizeof(clientbuf.info);
-    sprintf(clientbuf.info.message, "%d", rand());
+    len = sizeof(clientbuf.msg);
+    sprintf(clientbuf.msg.message, "%d", rand());
 
-    printf("Client #%d sends message %s\n", clientbuf.info.pid, clientbuf.info.message);
+    printf("Client #%d sends message %s\n", clientbuf.msg.pid, clientbuf.msg.message);
     if (msgsnd(msqid, (struct clientmsgbuf *) &clientbuf, len, 0) < 0) {
         printf("Can't send message to queue\n");
         msgctl(msqid, IPC_RMID, (struct msqid_ds *) NULL);
@@ -60,12 +60,12 @@ int main() {
 
     printf("Waiting for response\n");
 
-    maxlen = sizeof(serverbuf.info);
+    maxlen = sizeof(serverbuf.msg);
     if (len = msgrcv(msqid, &serverbuf, maxlen, getpid(), 0) < 0) {
         printf("Can't receive message from queue\n");
         exit(-1);
     }
-    printf("Server: %s\n", serverbuf.info.message);
+    printf("Server: %s\n", serverbuf.msg.message);
 
     return 0;
 

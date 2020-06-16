@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
-
+#include <stdlib.h>
 
 int main() {
     int msqid;
@@ -20,15 +20,15 @@ int main() {
         long mtype;
         struct {
             pid_t pid;
-            char message[666];
-        } info;
+            char message[256];
+        } msg;
     } clientbuf;
 
     struct sermsgbuf {
         long mtype;
         struct {
-            char message[666];
-        } info;
+            char message[256];
+        } msg;
     } serverbuf;
 
     if ((key = ftok(pathname, 0)) < 0) {
@@ -42,18 +42,18 @@ int main() {
     }
 
     while (1) {
-        maxlen = sizeof(clientbuf.info);
+        maxlen = sizeof(clientbuf.msg);
         if (len = msgrcv(msqid, (struct clientmsgbuf *) &clientbuf, maxlen, 1, 0) < 0) {
             printf("Can't receive message from queue\n");
             exit(-1);
         }
 
-        printf("Client %d: %s\n", clientbuf.info.pid, clientbuf.info.message);
+        printf("Client %d: %s\n", clientbuf.msg.pid, clientbuf.msg.message);
 
-        serverbuf.mtype = clientbuf.info.pid;
+        serverbuf.mtype = clientbuf.msg.pid;
 
-        strcpy(serverbuf.info.message, clientbuf.info.message);
-        len = sizeof(serverbuf.info);
+        strcpy(serverbuf.msg.message, clientbuf.msg.message);
+        len = sizeof(serverbuf.msg);
 
         if (msgsnd(msqid, (struct sermsgbuf *) &serverbuf, len, 0) < 0) {
             printf("Can't send message to queue\n");
