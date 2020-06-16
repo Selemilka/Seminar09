@@ -48,7 +48,7 @@ int main() {
             exit(-1);
         }
 
-        printf("Client %d: %s\n", clientbuf.msg.pid, clientbuf.msg.message);
+        printf("[Server]: Message from Client %d: %s\n", clientbuf.msg.pid, clientbuf.msg.message);
 
         serverbuf.mtype = clientbuf.msg.pid;
 
@@ -60,7 +60,7 @@ int main() {
             msgctl(msqid, IPC_RMID, (struct msqid_ds *) NULL);
             exit(-1);
         }
-        printf("Sent response\n");
+        printf("[Server]: Sent response to Client %d\n", clientbuf.msg.pid);
     }
     return 0;
 }

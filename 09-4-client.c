@@ -51,21 +51,21 @@ int main() {
     len = sizeof(clientbuf.msg);
     sprintf(clientbuf.msg.message, "%d", rand());
 
-    printf("Client #%d sends message %s\n", clientbuf.msg.pid, clientbuf.msg.message);
+    printf("[Client %d]: sends message: %s\n", clientbuf.msg.pid, clientbuf.msg.message);
     if (msgsnd(msqid, (struct clientmsgbuf *) &clientbuf, len, 0) < 0) {
         printf("Can't send message to queue\n");
         msgctl(msqid, IPC_RMID, (struct msqid_ds *) NULL);
         exit(-1);
     }
 
-    printf("Waiting for response\n");
+    printf("[Client %d]: Waiting for response...\n", clientbuf.msg.pid);
 
     maxlen = sizeof(serverbuf.msg);
     if (len = msgrcv(msqid, &serverbuf, maxlen, getpid(), 0) < 0) {
         printf("Can't receive message from queue\n");
         exit(-1);
     }
-    printf("Server: %s\n", serverbuf.msg.message);
+    printf("[Client %d]: Recieved from Server: %s\n", clientbuf.msg.pid, serverbuf.msg.message);
 
     return 0;
 
